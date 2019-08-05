@@ -51,5 +51,21 @@ server.delete('/api/users/:id', (req, res) => {
     });
 });
 
+server.put('/api/users/:id', (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
+  Users.update(id, changes)
+    .then(updated => {
+      if (updated) {
+        res.status(200).json({ updated });
+      } else {
+        res.status(404).json({ message: 'user not found' });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ message: 'error updating user' });
+    });
+});
+
 const port = 8000;
 server.listen(port, () => console.log('running on port 8000...'));
