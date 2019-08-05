@@ -18,6 +18,17 @@ server.get('/api/users', (req, res) => {
     });
 });
 
+server.get('/api/users/:id', (req, res) => {
+  const userId = req.params.id;
+  Users.findById(userId)
+    .then(userId => {
+      res.status(200).json(userId);
+    })
+    .catch(err => {
+      res.status(500).json({ message: 'User w/specified ID doesnt exist' });
+    });
+});
+
 server.post('/api/users', (req, res) => {
   const userInfo = req.body;
   Users.insert(userInfo)
@@ -29,9 +40,16 @@ server.post('/api/users', (req, res) => {
     });
 });
 
-
-
-
+server.delete('/api/users/:id', (req, res) => {
+  const userId = req.params.id;
+  Users.remove(userId)
+    .then(user => {
+      res.status(201).json({ message: 'user removed' });
+    })
+    .catch(err => {
+      res.status(500).json({ message: 'error removing user' });
+    });
+});
 
 const port = 8000;
 server.listen(port, () => console.log('running on port 8000...'));
