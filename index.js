@@ -21,18 +21,22 @@ server.get('/api/users', (req, res) => {
 });
 
 server.get('/api/users/:id', (req, res) => {
-  const userId = req.params.id;
-  if (!userId) {
-    res
-      .status(404)
-      .json({ message: 'the user with the specified ID does not exist' });
-  }
-  Users.findById(userId)
-    .then(userId => {
-      res.status(200).json(userId);
+  const findId = req.params.id;
+
+  Users.findById(findId)
+    .then(user => {
+      if (!user) {
+        res
+          .status(404)
+          .json({ message: 'The user with the specified ID does not exist.' });
+      } else {
+        res.status(200).json(user);
+      }
     })
     .catch(err => {
-      res.status(500).json({ error: 'user info could not be retrieved' });
+      res
+        .status(500)
+        .json({ error: 'The user information could not be retrieved.' });
     });
 });
 
